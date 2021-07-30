@@ -1,46 +1,46 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[4]:
+# In[133]:
 
 
 import csv
-
+import random
 from matplotlib import pyplot as plt
 
 
-# In[36]:
+# In[134]:
 
 
 data = csv.reader(open('./data/unit05_seoul.csv', 'rt', encoding='UTF-8'))
 next(data)
 
 
-# In[37]:
+# In[135]:
 
 
 ls = list(data)
 
 
-# In[38]:
+# In[136]:
 
 
 print([i for i in ls])
 
 
-# In[64]:
+# In[137]:
 
 
 [i[-1] for i in ls]  # show max temp
 
 
-# In[65]:
+# In[138]:
 
 
-[i[-2] for i in ls] 
+[i[-2] for i in ls]   # show min temp
 
 
-# In[67]:
+# In[139]:
 
 
 max_temps = []
@@ -50,17 +50,17 @@ min_temps = []
 print(f'max temps: total {len(max_temps)} records. \nmin temps: total {len(min_temps)} records. ')
 
 
-# In[69]:
+# In[140]:
 
 
-plt.title('Temp changes on my birthday')
+plt.title('Temp changes on my birthdays')
 plt.plot(max_temps, 'r', label='max temp')
 plt.plot(min_temps, 'b', label='min temp')
 plt.legend()
 plt.show()
 
 
-# In[70]:
+# In[141]:
 
 
 high = []
@@ -73,19 +73,71 @@ for i in ls:
                 low.append(float(i[-2]))
 
 
-# In[71]:
+# In[142]:
 
 
 plt.rcParams['axes.unicode_minus'] = False
 plt.title('Temp changes on my birthdays')
-plt.plot(high, 'pink', label='high')
-plt.plot(low, 'skyblue', label='low')
+plt.plot(high, 'orange', label='high')
+plt.plot(low, 'g', label='low')
 plt.legend()
 plt.show() 
 
 
-# In[ ]:
+# In[143]:
 
 
+arr = []
+[arr.append(random.randint(1, 1000))for i in range(13)]
+plt.boxplot(arr)
+plt.show()
 
+
+# In[145]:
+
+
+month = [[], [], [], [], [], [], [], [], [], [], [], []]
+# for i in arr:
+#     if i[-1] != '':
+#         month[int(i[0].split('-')[1])-1].append(float(i[-1]))
+[month[int(i[0].split('-')[1]) - 1].append(float(i[-1])) for i in ls if i[-1] != '']
+plt.boxplot(month)
+plt.show()
+
+
+# In[144]:
+
+
+day = []
+[day.append([]) for i in range(31)]
+[day[int(i[0].split('-')[2]) - 1].append(float(i[-1]))
+ for i in ls
+     if i[-1] != ''
+         and i[0].split('-')[1] == month]
+
+#    [day.append(float(j[-1]) for i in arr if j[-1] != '' and j[0].split('-')[1] == '08' and int(j[0].split('-')[2]) - 1]
+plt.style.use('ggplot')
+plt.figure(figsize=(10, 5), dpi=300)
+plt.boxplot(day, showfliers=False)
+plt.show()
+
+
+# In[130]:
+
+
+aug=[]
+dec=[]
+
+for i in ls:
+    month=i[0].split('-')[1]
+    if i[-1] !='':
+        if month =='08':
+            aug.append(float(i[-1]))
+        if month =='12':
+            dec.append(float(i[-1]))
+plt.title('Temp records in Aug and Dec')
+plt.hist(aug, bins=100, color='orange', label='Aug')
+plt.hist(dec, bins=100, color='green', label='Dec')
+plt.legend()
+plt.show()
 
